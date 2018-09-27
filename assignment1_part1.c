@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <omp.h>
 
 #define MAX_S	100
 
@@ -65,6 +66,19 @@ void initData() {
 	}
 	// N, g, y, b
 	scanf("%d\n%d,%d,%d", &N, &g, &y, &b);
+}
+
+
+void simulate() {
+	// set the number of threads
+	omp_set_num_threads(g+y+b);
+
+ 	#pragma omp parallel private(tid)
+ 	{
+ 		tid = omp_get_thread_num();
+ 		printf("Hello world from thread %d", tid);
+ 	}
+
 }
 
 int main(int argc, char const *argv[]) {
