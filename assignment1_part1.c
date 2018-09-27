@@ -2,55 +2,73 @@
 #include<stdlib.h>
 #include<string.h>
 
-int S;					// Number of train stations
-char **L;				// Name list of all stations
-int M[100][100];					// Adjacency Matrix
-float *P;				// Popularity of each station
-int *G, *Y, *B;			// List of stations serviced by green/yellow/blue line
-int N;					// Number of time ticks (time-units) in the simulation
-int g, y, b;			// Number of trains per each line (green, yellow, blue)
+#define MAX_S	100
+
+int S;								// Number of train stations
+char *L[MAX_S];						// Name list of all stations
+int M[MAX_S][MAX_S];				// Adjacency Matrix
+float P[MAX_S];						// Popularity of each station
+int G[MAX_S], Y[MAX_S], B[MAX_S];	// List of stations serviced by green/yellow/blue line
+int G_size, Y_size, B_size;			// List size for G, Y, B
+int N;								// Number of time ticks (time-units) in the simulation
+int g, y, b;						// Number of trains per each line (green, yellow, blue)
 
 
 void initData() {
 	int i, j;
-	char inputStr[1000], tempChar;
+	char inputStr[MAX_S * 20], tempChar;
 	const char delim[2] = ",";
 	char *tempStr;
-	char *nameList[S];
-	float p[S];
 	
 	// L
 	scanf("%s", inputStr);
 	tempStr = strtok(inputStr, delim);
 	for (i = 0; i < S && tempStr != NULL; i++) {
-		nameList[i] = tempStr;
+		L[i] = tempStr;
 		tempStr = strtok(NULL, delim);
 	}
-	L = nameList;
 	// M
 	for (i = 0; i < S; i++)
 		for (j = 0; j < S; j++)
 			scanf("%d", &M[i][j]);
 	// P
 	for (i = 0; i < S; i++) {
-		scanf("%f", &p[i]);
+		scanf("%f", &P[i]);
 		scanf("%c", &tempChar);
 	}
-	P = p;
 	// G
-	// scanf("%s", inputStr);
-	// tempStr = strtok(inputStr, delim);
-	// while (tempStr != NULL) {
-
-	// }
+	scanf("%s", inputStr);
+	tempStr = strtok(inputStr, delim);
+	while (tempStr != NULL) {
+		for (i = 0; i < S; i++) {
+			if (strcmp(tempStr, L[i]) == 0)
+				G[G_size++] = i;
+		}
+	}
+	// Y
+	scanf("%s", inputStr);
+	tempStr = strtok(inputStr, delim);
+	while (tempStr != NULL) {
+		for (i = 0; i < S; i++) {
+			if (strcmp(tempStr, L[i]) == 0)
+				Y[Y_size++] = i;
+		}
+	}
+	// B
+	scanf("%s", inputStr);
+	tempStr = strtok(inputStr, delim);
+	while (tempStr != NULL) {
+		for (i = 0; i < S; i++) {
+			if (strcmp(tempStr, L[i]) == 0)
+				B[B_size++] = i;
+		}
+	}
+	// N, g, y, b
+	scanf("%d\n%d,%d,%d", &N, &g, &y, &b);
 }
 
-
 int main(int argc, char const *argv[]) {
-	int i;
 	scanf("%d\n", &S);
 	initData();
-	for (i = 0; i < S; i++)
-		printf("%s\n", L[i]);
 	return 0;
 }
